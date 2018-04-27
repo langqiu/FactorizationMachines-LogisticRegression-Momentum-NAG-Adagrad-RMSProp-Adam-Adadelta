@@ -6,7 +6,7 @@ using namespace lr;
 using namespace util;
 
 void help_1() {
-  std::cout << "---------------------------------------------------------------------" << std::endl;
+  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
   std::cout << "please input model type (" << LR_MODEL
     << "/" << LR_M_MODEL
     << "/" << LR_NAG_MODEL
@@ -15,13 +15,13 @@ void help_1() {
     << "/" << LR_ADAM_MODEL
     << "/" << LR_ADAD_MODEL
     << "):" << std::endl;
-  std::cout << "---------------------------------------------------------------------" << std::endl;
+  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 }
 
 void help_2() {
-  std::cout << "---------------------------------------------------------------------" << std::endl;
+  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
   std::cout << "please input params separated by comma (iter,batch):" << std::endl;
-  std::cout << "---------------------------------------------------------------------" << std::endl;
+  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -106,19 +106,19 @@ int main(int argc, char* argv[]) {
         }
       }
     }
-    std::cout << "---------------------------------------------------------------------" << std::endl;
+    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
     std::cout << "auc: " << auc_best << std::endl;
     std::cout << "alpha: " << v_alpha[0] << std::endl;
     std::cout << "lambda: " << v_lambda[0] << std::endl;
     std::cout << "beta_1: " << v_beta_1[0] << std::endl;
     std::cout << "beta_2: " << v_beta_2[0] << std::endl;
-    std::cout << "---------------------------------------------------------------------" << std::endl;
+    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
     std::cout << "logloss: " << logloss_best << std::endl;
     std::cout << "alpha: " << v_alpha[4] << std::endl;
     std::cout << "lambda: " << v_lambda[4] << std::endl;
     std::cout << "beta_1: " << v_beta_1[4] << std::endl;
     std::cout << "beta_2: " << v_beta_2[4] << std::endl;
-    std::cout << "---------------------------------------------------------------------" << std::endl;
+    std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
     help_1();
   }
   return 0;
