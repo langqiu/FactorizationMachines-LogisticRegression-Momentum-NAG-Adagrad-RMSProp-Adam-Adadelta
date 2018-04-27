@@ -17,21 +17,13 @@ How to use it?
 
     2)  choose model and input hyper parameters.
 
-        ---------------------------------------------------------------------
         please input [M] to create a new model:
-        ---------------------------------------------------------------------
         M
-        ---------------------------------------------------------------------
         please input model type (lr/lr_m/lr_nag/lr_ag/lr_rms/lr_adam/lr_adad):
-        ---------------------------------------------------------------------
         lr
-        ---------------------------------------------------------------------
         new model[M] or tune parameters[P]?
-        ---------------------------------------------------------------------
         P
-        ---------------------------------------------------------------------
         please input params separated by comma (iter,batch,alpha,lambda,beta_1,beta_2):
-        ---------------------------------------------------------------------
         1,1,0.03,0.01,0,0
 
     3)  wait for training and evaluating
@@ -47,9 +39,8 @@ How to use it?
 
     4)  choose new model or tune this model again
 
-        ---------------------------------------------------------------------
         new model[M] or tune parameters[P]?
-        ---------------------------------------------------------------------
+        P
 
 2.  search the best combination of hyper parameters for each variant.
     ./bin/search train-dataset test-dataset
