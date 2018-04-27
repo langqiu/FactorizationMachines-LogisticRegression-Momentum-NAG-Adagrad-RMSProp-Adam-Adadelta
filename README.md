@@ -18,7 +18,7 @@ How to use it?
     2)  choose model and input hyper parameters.
 
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        please input [M] to create a new model:
+        +please input [M] to create a new model:
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         M
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
