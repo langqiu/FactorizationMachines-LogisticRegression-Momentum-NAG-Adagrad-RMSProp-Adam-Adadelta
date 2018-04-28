@@ -13,8 +13,8 @@ namespace lr {
     /*
      * attention! element-wise operation
      * g(t) = -1 * [g(logloss) + g(L2)]
-     * m(t) = beta_1 * s(t-1) + (1 - beta_1) * g(t)
-     * v(t) = beta_2 * r(t-1) + (1 - beta_2) * g(t) * g(t)
+     * m(t) = beta_1 * m(t-1) + (1 - beta_1) * g(t)
+     * v(t) = beta_2 * v(t-1) + (1 - beta_2) * g(t) * g(t)
      * m'(t) = m(t) / (1 - beta_1^t)
      * v'(t) = v(t) / (1 - beta_2^t)
      * theta(t) = theta(t-1) + alpha * m'(t) / (sqrt(v'(t)) + delta)

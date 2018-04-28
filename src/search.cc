@@ -35,25 +35,25 @@ int main(int argc, char* argv[]) {
   LR* lr_instance = NULL;
   std::string model_type;
   std::string command;
-  //std::vector<std::string> v_model = std::vector<std::string>{LR_MODEL,LR_M_MODEL,LR_NAG_MODEL,LR_AG_MODEL,LR_RMS_MODEL,LR_ADAM_MODEL,LR_ADAD_MODEL};
+  std::vector<std::string> v_model = std::vector<std::string>{LR_MODEL,LR_M_MODEL,LR_NAG_MODEL,LR_AG_MODEL,LR_RMS_MODEL,LR_ADAM_MODEL,LR_ADAD_MODEL};
   help_1();
-  while (std::cin >> model_type) { // remove '\n' by default
-  //for (auto& model_type : v_model) {
+  //while (std::cin >> model_type) { // remove '\n' by default
+  for (auto& model_type : v_model) {
     lr_instance = LRFactory::get_lr_instance(model_type);
     if (!lr_instance) {
       help_1();
       continue;
     }
-    help_2();
-    std::cin >> command;
-    std::cout << "searching......" << std::endl;
-    std::vector<std::string> params_vector = split(command, PARAM_SEP);
-    if (params_vector.size() < 2) continue;
-    size_t iter = strtoull(params_vector[0].c_str(), NULL, 0);
-    size_t batch = strtoull(params_vector[1].c_str(), NULL, 0);
-    //size_t iter = 1;
-    //size_t batch = 1;
-    //std::cout << model_type << std::endl;
+    //help_2();
+    //std::cin >> command;
+    //std::cout << "searching......" << std::endl;
+    //std::vector<std::string> params_vector = split(command, PARAM_SEP);
+    //if (params_vector.size() < 2) continue;
+    //size_t iter = strtoull(params_vector[0].c_str(), NULL, 0);
+    //size_t batch = strtoull(params_vector[1].c_str(), NULL, 0);
+    size_t iter = 1;
+    size_t batch = 1;
+    std::cout << model_type << std::endl;
     score_type logloss_best = 1000.0;
     score_type auc_best = 0.5;
     std::vector<param_type> v_alpha = std::vector<param_type>{0,0.01,0.1,0.02,0};
