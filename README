@@ -8,7 +8,7 @@ optimization algorithms, including Momentum/NAG/Adagrad/RMSProp/Adam/Adadelta.
 
 How to use it?
 ----------------------------------------------------------------------
-"make" to build the project, there are two ways to use it:
+Compile the project by running "make", there are two ways to use it:
 
 1.  choose a variant of the LR model and tune it.
 
