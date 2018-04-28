@@ -13,7 +13,7 @@ Compile the project by running "make", there are two ways to use it:
 1.  choose a variant of the LR model and tune it.
 
     1)  start running.
-        ./bin/train train-dataset test-dataset
+        ./bin/train data/airbnb_train_dataset data/airbnb_test_dataset
 
     2)  choose a model and input hyper parameters.
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -52,7 +52,7 @@ Compile the project by running "make", there are two ways to use it:
 2.  search the best combination of hyper parameters for each variant of model.
 
     1)  start running.
-        ./bin/search train-dataset test-dataset
+        ./bin/search data/airbnb_train_dataset data/airbnb_test_dataset
 
     2)  wait for training each model to search the best combination of hyper parameters.
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
