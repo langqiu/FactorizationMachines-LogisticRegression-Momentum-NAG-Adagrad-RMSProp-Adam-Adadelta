@@ -15,7 +15,7 @@ Compile the project by running "make", there are two ways to use it:
     1)  start running.
         ./bin/train train-dataset test-dataset
 
-    2)  choose model and input hyper parameters.
+    2)  choose a model and input hyper parameters.
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         please input [M] to create a new model:
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -43,18 +43,18 @@ Compile the project by running "make", there are two ways to use it:
           --> logloss: 0.478853
           --> mse: 0.157709
 
-    4)  choose new model or tune this model again.
+    4)  choose a new model or tune this model again.
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         new model[M] or tune parameters[P]?
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         P
 
-2.  search the best combination of hyper parameters for each variant.
+2.  search the best combination of hyper parameters for each variant of model.
 
     1)  start running.
         ./bin/search train-dataset test-dataset
 
-    2)  wait for training each model to search the best hyper parameters.
+    2)  wait for training each model to search the best combination of hyper parameters.
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         please input model type (lr/lr_m/lr_nag/lr_ag/lr_rms/lr_adam/lr_adad):
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -77,9 +77,9 @@ Compile the project by running "make", there are two ways to use it:
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-What is the meaning of each hyper parameters?
+What is the meaning of each hyper parameter?
 ----------------------------------------------------------------------
-There are 6 hyper parameters need to be initialized.
+There are 6 hyper parameters which need to be initialized.
 
 1.  iter:     number of iteration
 
@@ -107,7 +107,7 @@ I highly recommend this blog by Sebastian Ruder.
 http://ruder.io/optimizing-gradient-descent/index.html#challenges
 
 
-Code Description
+Code description
 ----------------------------------------------------------------------
 util.h          common functions and typedef
 sample.h        dataset class, initialized in lr_factory.h
