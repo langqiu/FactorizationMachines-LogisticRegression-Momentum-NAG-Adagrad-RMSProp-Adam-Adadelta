@@ -1,44 +1,20 @@
 #include "lr.h"
 using namespace util;
 
-namespace lr {
+namespace model {
 
-  bool sort_by_param(const param_evaluate_type& l, const param_evaluate_type& r) {
-    return std::abs(l.first) > std::abs(r.first);
-  }
-
-  void print_step(const std::string& step) {
-#ifdef _DEBUG
-    std::cout << std::endl;
-    std::cout << "====> step " << step << "..." << std::endl;
-#endif
-  }
-
-  void print_iteration(const size_t& iter) {
-#ifdef _DEBUG
-    std::cout << "  --> iteration " << iter << std::endl;
-#endif
-  }
-
-  LR::LR(DataSet* p_train_dataset, DataSet* p_test_dataset,
+  LRModel::LRModel(DataSet* p_train_dataset, DataSet* p_test_dataset,
       const hash2index_type& f_hash2index, const index2hash_type& f_index2hash,
-      const f_index_type& f_size) :
+      const f_index_type& f_size, const std::string& model_type) :
+    Model(p_train_dataset, p_test_dataset,
+        f_hash2index, f_index2hash, f_size, model_type),
     _alpha(0.0), _lambda(0.0),
-    _beta_1(0.0), _beta_2(0.0),
-    _iter_size(0), _batch_size(0),
-    _curr_batch(0), _p_train_dataset(p_train_dataset),
-    _p_test_dataset(p_test_dataset), _f_hash2index(f_hash2index),
-    _f_index2hash(f_index2hash), _f_size(f_size) {}
+    _beta_1(0.0), _beta_2(0.0) {}
 
-  LR::~LR() {
-    if (_p_train_dataset) _p_train_dataset = NULL;
-    if (_p_test_dataset) _p_test_dataset = NULL;
-  }
-
-  void LR::init(const size_t& iter_size, const size_t& batch_size,
+  void LRModel::init(const size_t& iter_size, const size_t& batch_size,
       const param_type& alpha, const param_type& lambda,
-      const param_type& beta_1, const param_type& beta_2) {
-    print_step("init...");
+      const param_type& beta_1, const param_type& beta_2,
+      const param_type& fm_dims) {
     // init model parameters
     _theta.clear();
     _theta.reserve(_f_size);
@@ -65,50 +41,11 @@ namespace lr {
     _second_moment_vector = _theta;
   }
 
-  void LR::train() {
-    /*
-     * use "this" pointer to avoid rewriting train func
-     */
-    print_step("train...");
-    size_t data_size = _p_train_dataset->get_size(); // get size of train dataset
-    time_type time_start = time_now(); // time before train
-    for (size_t iter=0; iter<_iter_size; iter++) { // each iteration
-      size_t batch_start = 0; // start from the begining of dataset
-      while (batch_start < data_size) { // each batch
-        _curr_batch++;
-        size_t batch_end = batch_start + _batch_size; // calculate end
-        if (batch_end >= data_size) batch_end = data_size; // end for the last batch
-        this->_forward(batch_start, batch_end, _p_train_dataset);
-        this->_backward(batch_start, batch_end);
-        this->_update();
-        batch_start = batch_end; // update start of the next batch
-      }
-      if (iter % MSE_INTERVAL == 0) {
-        print_iteration(iter);
-        _cal_model_logloss();
-        //_cal_model_mse();
-      }
-    }
-    time_type time_end = time_now(); // time after train
-    time_diff(time_end, time_start); // print time cost
-    _print_model_param(); // print model
-  }
-
-  void LR::evaluate() {
-    print_step("evaluate");
-    _predict_dataset(_p_train_dataset); // predict train dataset
-    _predict_dataset(_p_test_dataset); // predict test dataset
-    _p_train_dataset->evaluate(); // evaluate train dataset
-    _p_test_dataset->evaluate(); // evaluate test dataset
-  }
-
-  void LR::_forward(const size_t& l, const size_t& r, DataSet* p_data) {
+  void LRModel::_forward(const size_t& l, const size_t& r, DataSet* p_data) {
     /*
      * predict the sample in [l, r) of the dataset p_data
      */
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr forward" << std::endl;
-#endif
+    if (_curr_batch == 1) _print_step("forward");
     auto& data = p_data->get_data(); // get dataset
     for (size_t i=l; i<r; i++) { // loop each sample in this batch
       score_type product = 0;
@@ -122,7 +59,7 @@ namespace lr {
     }
   }
 
-  void LR::_backward(const size_t& l, const size_t& r) {
+  void LRModel::_backward(const size_t& l, const size_t& r) {
     /*
      * theta(t) = theta(t-1) * (1 - alpha * lambda / m)
      *    + alpha * SUM( (y(i) - y'(i)) * x(i,j) ) / m
@@ -130,9 +67,7 @@ namespace lr {
      *    or it is wrong and costs a lot of time.
      *    2 seconds (78 seconds if not) to train 1 million samples with SGD
      */
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr backward" << std::endl;
-#endif
+    if (_curr_batch == 1) _print_step("backward");
     auto& data = _p_train_dataset->get_data(); // get train dataset
     std::unordered_set<f_index_type> theta_updated; // record theta in BGD
     score_type factor = -1 * _alpha * _lambda / (r - l); // L2 delta factor
@@ -156,14 +91,12 @@ namespace lr {
     _theta_new[_f_size-1] += _theta[_f_size-1] * factor; // delta from L2 for bias
   }
 
-  void LR::_update() {
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr update" << std::endl;
-#endif
+  void LRModel::_update() {
+    if (_curr_batch == 1) _print_step("update");
     _theta = _theta_new;
   }
 
-  void LR::_print_model_param() {
+  void LRModel::_print_model_param() {
 #ifdef _DEBUG
     /*
      * print the most useful, useless features and model bias
@@ -184,23 +117,4 @@ namespace lr {
 #endif
   }
 
-  void LR::_predict_dataset(DataSet* p_data) {
-    size_t data_size = p_data->get_size(); // get the size of dataset
-    _forward(0, data_size, p_data); // predict the dataset
-  }
-
-  void LR::_cal_model_mse() {
-#ifdef _DEBUG
-    _predict_dataset(_p_train_dataset); // predict the dataset
-    std::cout << "  --> mse " << _p_train_dataset->cal_mse() << std::endl;
-#endif
-  }
-
-  void LR::_cal_model_logloss() {
-#ifdef _DEBUG
-    _predict_dataset(_p_train_dataset); // predict the dataset
-    std::cout << "  --> logloss " << _p_train_dataset->cal_logloss() << std::endl;
-#endif
-  }
-
-} // namespace lr
+} // namespace model

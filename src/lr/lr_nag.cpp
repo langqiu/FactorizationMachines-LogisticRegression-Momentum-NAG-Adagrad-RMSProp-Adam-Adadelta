@@ -1,21 +1,20 @@
 #include "lr_nag.h"
 using namespace util;
 
-namespace lr {
+namespace model {
 
-  LRNAG::LRNAG(DataSet* p_train_dataset, DataSet* p_test_dataset,
+  LRNAGModel::LRNAGModel(DataSet* p_train_dataset, DataSet* p_test_dataset,
       const hash2index_type& f_hash2index, const index2hash_type& f_index2hash,
-      const f_index_type& f_size) :
-    LRMomentum(p_train_dataset, p_test_dataset, f_hash2index, f_index2hash, f_size) {}
+      const f_index_type& f_size, const std::string& model_type) :
+    LRMomentumModel(p_train_dataset, p_test_dataset,
+        f_hash2index, f_index2hash, f_size, model_type) {}
 
-  void LRNAG::_forward(const size_t& l, const size_t& r, DataSet* p_data) {
+  void LRNAGModel::_forward(const size_t& l, const size_t& r, DataSet* p_data) {
     /*
      * predict the sample in [l, r) of the dataset p_data
      * theta(t) = theta(t-1) + beta_1 * v(t-1)
      */
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr nag forward" << std::endl;
-#endif
+    if (_curr_batch == 1) _print_step("forward");
     // small step first
     if (p_data == _p_train_dataset) {
       for (auto& index : _theta_updated_vector) {
@@ -38,4 +37,4 @@ namespace lr {
     _theta_new = _theta;
   }
 
-} // namespace lr
+} // namespace model

@@ -1,15 +1,16 @@
 #include "lr_adadelta.h"
 using namespace util;
 
-namespace lr {
+namespace model {
 
-  LRAdadelta::LRAdadelta(DataSet* p_train_dataset, DataSet* p_test_dataset,
+  LRAdadeltaModel::LRAdadeltaModel(DataSet* p_train_dataset, DataSet* p_test_dataset,
       const hash2index_type& f_hash2index, const index2hash_type& f_index2hash,
-      const f_index_type& f_size) :
-    LR(p_train_dataset, p_test_dataset, f_hash2index, f_index2hash, f_size),
+      const f_index_type& f_size, const std::string& model_type) :
+    LRModel(p_train_dataset, p_test_dataset,
+        f_hash2index, f_index2hash, f_size, model_type),
     _adadelta_delta(ADADELTA_DELTA) {}
 
-  void LRAdadelta::_backward(const size_t& l, const size_t& r) {
+  void LRAdadeltaModel::_backward(const size_t& l, const size_t& r) {
     /*
      * attention! element-wise operation
      * g(t) = -1 * [g(logloss) + g(L2)]
@@ -17,9 +18,7 @@ namespace lr {
      * theta(t) = theta(t-1) + (sqrt(d(t-1)) + delta) * g(t) / (sqrt(r(t)) + delta)
      * d(t) = beta_1 * d(t-1) + (1 - beta_1) * ::pow(theta(t) - theta(t-1), 2)
      */
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr adadelta backward" << std::endl;
-#endif
+    if (_curr_batch == 1) _print_step("backward");
     auto& data = _p_train_dataset->get_data(); // get train dataset
     std::unordered_set<f_index_type> theta_updated; // record theta in BGD
     _theta_updated_vector.clear(); // clear before backward
@@ -63,10 +62,8 @@ namespace lr {
     }
   }
 
-  void LRAdadelta::_update() {
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr adadelta update" << std::endl;
-#endif
+  void LRAdadeltaModel::_update() {
+    if (_curr_batch == 1) _print_step("update");
     _theta = _theta_new;
     for (size_t i=0; i<_f_size; i++) {
       // do not set zero to moment vector, because features don't show up continuously between batchs
@@ -74,4 +71,4 @@ namespace lr {
     }
   }
 
-} // namespace lr
+} // namespace model

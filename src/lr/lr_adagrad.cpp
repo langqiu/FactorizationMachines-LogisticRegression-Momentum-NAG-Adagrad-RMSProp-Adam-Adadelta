@@ -1,24 +1,23 @@
 #include "lr_adagrad.h"
 using namespace util;
 
-namespace lr {
+namespace model {
 
-  LRAdagrad::LRAdagrad(DataSet* p_train_dataset, DataSet* p_test_dataset,
+  LRAdagradModel::LRAdagradModel(DataSet* p_train_dataset, DataSet* p_test_dataset,
       const hash2index_type& f_hash2index, const index2hash_type& f_index2hash,
-      const f_index_type& f_size) :
-    LR(p_train_dataset, p_test_dataset, f_hash2index, f_index2hash, f_size),
+      const f_index_type& f_size, const std::string& model_type) :
+    LRModel(p_train_dataset, p_test_dataset,
+        f_hash2index, f_index2hash, f_size, model_type),
     _adagrad_delta(ADAGRAD_DELTA) {}
 
-  void LRAdagrad::_backward(const size_t& l, const size_t& r) {
+  void LRAdagradModel::_backward(const size_t& l, const size_t& r) {
     /*
      * attention! element-wise operation
      * g(t) = -1 * [g(logloss) + g(L2)]
      * r(t) = r(t-1) + g(t) * g(t)
      * theta(t) = theta(t-1) + alpha * g(t) / (sqrt(r(t)) + delta)
      */
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr adagrad backward" << std::endl;
-#endif
+    if (_curr_batch == 1) _print_step("backward");
     auto& data = _p_train_dataset->get_data(); // get train dataset
     std::unordered_set<f_index_type> theta_updated; // record theta in BGD
     _theta_updated_vector.clear(); // clear before backward
@@ -55,10 +54,8 @@ namespace lr {
     }
   }
 
-  void LRAdagrad::_update() {
-#ifdef _DEBUG
-    if (_curr_batch == 1) std::cout << "lr adagrad update" << std::endl;
-#endif
+  void LRAdagradModel::_update() {
+    if (_curr_batch == 1) _print_step("update");
     _theta = _theta_new;
     for (size_t i=0; i<_f_size; i++) {
       // do not set zero to moment vector, because features don't show up continuously between batchs
@@ -66,4 +63,4 @@ namespace lr {
     }
   }
 
-} // namespace lr
+} // namespace model

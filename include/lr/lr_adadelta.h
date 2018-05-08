@@ -1,16 +1,15 @@
 #ifndef __H_LR_ADADELTA_H__
 #define __H_LR_ADADELTA_H__
 #define ADADELTA_DELTA ::pow(10, -7)
-#include "util.h"
 #include "lr.h"
 
-namespace lr {
+namespace model {
 
-  class LRAdadelta : public LR {
+  class LRAdadeltaModel : public LRModel {
     public:
-      LRAdadelta(DataSet* p_train_dataset, DataSet* p_test_dataset,
+      LRAdadeltaModel(DataSet* p_train_dataset, DataSet* p_test_dataset,
           const util::hash2index_type& f_hash2index, const util::index2hash_type& f_index2hash,
-          const util::f_index_type& f_size);
+          const util::f_index_type& f_size, const std::string& model_type);
     protected:
       void _backward(const size_t& l, const size_t& r);
       void _update();
@@ -18,6 +17,6 @@ namespace lr {
       util::param_type _adadelta_delta;
   };
 
-} // namespace lr
+} // namespace model
 
 #endif // __H_LR_ADADELTA_H__
