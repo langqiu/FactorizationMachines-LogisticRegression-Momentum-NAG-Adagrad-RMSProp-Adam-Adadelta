@@ -1,6 +1,6 @@
 #ifndef __H_MODEL_H__
 #define __H_MODEL_H__
-#define TRAIN_PRINT_INTERVAL 10
+#define TRAIN_PRINT_INTERVAL 10000
 #define MODEL_TOP_PARAMS 10
 #include "util.h"
 #include "sample.h"
@@ -30,7 +30,7 @@ namespace model {
       void _cal_model_mse();
       void _cal_model_logloss();
       void _print_step(const std::string& step);
-      void _print_iteration(const size_t& iter);
+      void _print_mini_batch(const size_t& batch);
       // train parameters
       size_t _iter_size; // iteration size
       size_t _batch_size; // batch size

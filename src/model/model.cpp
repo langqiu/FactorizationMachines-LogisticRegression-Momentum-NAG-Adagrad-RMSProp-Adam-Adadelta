@@ -44,18 +44,13 @@ namespace model {
         this->_backward(batch_start, batch_end);
         this->_update();
         batch_start = batch_end; // update start of the next batch
-        if (_curr_batch % 10000 == 0) {
-          std::cout << std::endl;
-          _print_iteration(_curr_batch);
+        if (_curr_batch % TRAIN_PRINT_INTERVAL == 0) {
+          _print_mini_batch(_curr_batch);
+          _cal_model_logloss();
+          _cal_model_mse();
           _predict_dataset(_p_test_dataset); // predict test dataset
           _p_test_dataset->evaluate(); // evaluate test dataset
         }
-      }
-      if (iter % TRAIN_PRINT_INTERVAL == 0) {
-        std::cout << std::endl;
-        _print_iteration(iter);
-        _cal_model_logloss();
-        _cal_model_mse();
       }
     }
     time_type time_end = time_now(); // time after train
@@ -112,9 +107,10 @@ namespace model {
 #endif
   }
 
-  void Model::_print_iteration(const size_t& iter) {
+  void Model::_print_mini_batch(const size_t& batch) {
 #ifdef _DEBUG
-    std::cout << "  --> iteration " << iter << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --> mini-batch " << batch << std::endl;
 #endif
   }
 

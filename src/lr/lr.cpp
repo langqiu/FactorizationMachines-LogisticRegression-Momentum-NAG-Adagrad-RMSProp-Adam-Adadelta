@@ -110,7 +110,7 @@ namespace model {
     for (size_t i=0; i<parameters.size() && i<MODEL_TOP_PARAMS; i++) {
       std::cout << _f_index2hash[parameters[i].second] << " " << parameters[i].first << std::endl;
     }
-    for (int i=parameters.size()-1; i>=0 && parameters.size()-i<MODEL_TOP_PARAMS; i--) {
+    for (int i=parameters.size()-1; i>=0 && parameters.size()-i<=MODEL_TOP_PARAMS; i--) {
       std::cout << _f_index2hash[parameters[i].second] << " " << parameters[i].first << std::endl;
     }
     std::cout << "bias: " << _theta[_f_size-1] << std::endl;

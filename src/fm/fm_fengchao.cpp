@@ -114,6 +114,7 @@ namespace model {
     std::vector<param_evaluate_type> parameters;
     std::cout << "############ model-top-params ############" << std::endl;
     for (size_t i=0; i<_f_size; i++) {
+      if (_f_index2hash[i] == 0) continue;
       param_type d = 0.0;
       for (size_t k=0; k<_fm_dims; k++) {
         d += _feature_vector[i][k] * _feature_vector[i][k];
@@ -124,7 +125,7 @@ namespace model {
     for (size_t i=0; i<parameters.size() && i<MODEL_TOP_PARAMS; i++) {
       std::cout << _f_index2hash[parameters[i].second] << " " << parameters[i].first << std::endl;
     }
-    for (int i=parameters.size()-1; i>=0 && parameters.size()-i<MODEL_TOP_PARAMS; i--) {
+    for (int i=parameters.size()-1; i>=0 && parameters.size()-i<=MODEL_TOP_PARAMS; i--) {
       std::cout << _f_index2hash[parameters[i].second] << " " << parameters[i].first << std::endl;
     }
 #endif
