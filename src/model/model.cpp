@@ -44,8 +44,15 @@ namespace model {
         this->_backward(batch_start, batch_end);
         this->_update();
         batch_start = batch_end; // update start of the next batch
+        if (_curr_batch % 10000 == 0) {
+          std::cout << std::endl;
+          _print_iteration(_curr_batch);
+          _predict_dataset(_p_test_dataset); // predict test dataset
+          _p_test_dataset->evaluate(); // evaluate test dataset
+        }
       }
       if (iter % TRAIN_PRINT_INTERVAL == 0) {
+        std::cout << std::endl;
         _print_iteration(iter);
         _cal_model_logloss();
         _cal_model_mse();

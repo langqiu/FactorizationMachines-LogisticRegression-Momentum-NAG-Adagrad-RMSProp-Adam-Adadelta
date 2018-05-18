@@ -3,6 +3,7 @@
 #define FM_DELTA 10.0
 #define MIN_BOUND -10.0
 #define MAX_BOUND 10.0
+#define INIT_RANGE 0.0001
 #include "model.h"
 
 namespace model {

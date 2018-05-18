@@ -21,7 +21,11 @@ namespace model {
     _feature_vector.clear();
     _feature_vector.reserve(_f_size);
     for (size_t i=0; i<_f_size; i++) {
-      std::vector<param_type> v(fm_dims-1, 0.0001);
+      std::vector<param_type> v;
+      for (size_t j=0; j<_fm_dims-1; j++) {
+        score_type r = (2 * unit_random() -1) * INIT_RANGE;
+        v.push_back(r);
+      }
       v.push_back(0.0); // bias
       _feature_vector.push_back(v);
     }
@@ -86,16 +90,11 @@ namespace model {
       for (auto& v : _theta_updated_vector) {
         for (size_t x=0; x<_fm_dims; x++) {
           score_type gradient = curr_sample._label - curr_sample._score;
-          if (x < _fm_dims - 1) gradient *= feature_vector_sum[_fm_dims - 2 - x];
+          if (x < _fm_dims - 1) gradient *= feature_vector_sum[(x + _fm_dims / 2) % (_fm_dims - 1)];
           _feature_vector_new[v][x] += _alpha * gradient * ::sqrt(_fm_delta)
             / ::sqrt(_fm_delta + _second_moment_vector[v][x]);
           if (_feature_vector_new[v][x] < _min_bound) _feature_vector_new[v][x] = _min_bound;
           if (_feature_vector_new[v][x] > _max_bound) _feature_vector_new[v][x] = _max_bound;
-          if (_curr_batch % 1000 == 0) {
-            std::cout << "gradient " << gradient << std::endl;
-            std::cout << x << " feature_vector_new " << _feature_vector_new[v][x] << std::endl;
-            std::cout << x << " feature_vector " << _feature_vector[v][x] << std::endl;
-          }
           _second_moment_vector[v][x] += gradient * gradient;
         }
       }

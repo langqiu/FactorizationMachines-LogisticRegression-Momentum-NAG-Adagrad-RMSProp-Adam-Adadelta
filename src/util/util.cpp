@@ -27,4 +27,9 @@ namespace util {
 #endif
   }
 
+  score_type unit_random() {
+    srand(time(0));
+    return rand() % 100 / 101.0;
+  }
+
 } // namespace util
