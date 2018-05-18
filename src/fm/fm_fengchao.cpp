@@ -42,6 +42,7 @@ namespace model {
       std::vector<util::param_type> v(_fm_dims, 0.0);
       _second_moment_vector.push_back(v);
     }
+    _gradient = _second_moment_vector;
   }
 
   void FMFengchaoModel::_forward(const size_t& l, const size_t& r, DataSet* p_data) {
@@ -71,19 +72,21 @@ namespace model {
   void FMFengchaoModel::_backward(const size_t& l, const size_t& r) {
     if (_curr_batch == 1) _print_step("backward");
     auto& data = _p_train_dataset->get_data(); // get train dataset
+    std::unordered_set<f_index_type> theta_updated; // record theta in BGD
+    std::vector<param_type> curr_theta_updated;
     for (size_t i=l; i<r; i++) {
-      std::unordered_set<f_index_type> theta_updated; // record theta in BGD
-      _theta_updated_vector.clear();
       auto& curr_sample = data[i]; // current sample
       std::vector<param_type> feature_vector_sum(_fm_dims, 0.0);
+      _theta_updated_vector.clear();
       for (size_t k=0; k<curr_sample._sparse_f_list.size(); k++) { // loop features
         auto& curr_f = curr_sample._sparse_f_list[k]; // current feature
         for (size_t x=0; x<_fm_dims; x++) {
           feature_vector_sum[x] += _feature_vector[curr_f.first][x];
         }
-        if (theta_updated.find(curr_f.first) == theta_updated.end()) {
+        _theta_updated_vector.push_back(curr_f.first);
+        if (r - l > 1 && theta_updated.find(curr_f.first) == theta_updated.end()) {
           theta_updated.insert(curr_f.first);
-          _theta_updated_vector.push_back(curr_f.first);
+          curr_theta_updated.push_back(curr_f.first);
         }
       }
       for (auto& v : _theta_updated_vector) {
@@ -94,8 +97,19 @@ namespace model {
             / ::sqrt(_fm_delta + _second_moment_vector[v][x]);
           if (_feature_vector[v][x] < _min_bound) _feature_vector[v][x] = _min_bound;
           if (_feature_vector[v][x] > _max_bound) _feature_vector[v][x] = _max_bound;
-          _second_moment_vector[v][x] += gradient * gradient;
+          if (r - l == 1) {
+            _second_moment_vector[v][x] += gradient * gradient;
+          } else {
+            _gradient[v][x] += gradient;
+          }
         }
+      }
+    }
+    if (r - l == 1) return;
+    for (auto& v : curr_theta_updated) {
+      for (size_t x=0; x<_fm_dims; x++) {
+        _second_moment_vector[v][x] += _gradient[v][x] * _gradient[v][x];
+        _gradient[v][x] = 0.0;
       }
     }
   }

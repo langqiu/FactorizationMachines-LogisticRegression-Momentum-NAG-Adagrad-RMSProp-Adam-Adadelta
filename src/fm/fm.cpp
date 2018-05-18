@@ -122,6 +122,7 @@ namespace model {
   void FMModel::_update() {
     if (_curr_batch == 1) _print_step("update");
     _theta = _theta_new;
+    // 嵌套vector直接赋值性能极其差，此行代码影响30倍性能
     //_feature_vector = _feature_vector_new;
     for (auto index : _theta_updated_vector) {
       _feature_vector[index] = _feature_vector_new[index];

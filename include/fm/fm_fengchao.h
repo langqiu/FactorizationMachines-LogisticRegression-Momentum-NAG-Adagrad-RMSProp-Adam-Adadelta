@@ -33,6 +33,7 @@ namespace model {
       // extra vectors
       std::vector<util::param_type> _theta_updated_vector;
       std::vector<std::vector<util::param_type>> _second_moment_vector;
+      std::vector<std::vector<util::param_type>> _gradient;
   };
 
 } // namespace model
