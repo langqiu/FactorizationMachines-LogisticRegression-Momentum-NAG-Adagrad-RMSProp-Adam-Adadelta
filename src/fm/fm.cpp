@@ -122,7 +122,10 @@ namespace model {
   void FMModel::_update() {
     if (_curr_batch == 1) _print_step("update");
     _theta = _theta_new;
-    _feature_vector = _feature_vector_new;
+    //_feature_vector = _feature_vector_new;
+    for (auto index : _theta_updated_vector) {
+      _feature_vector[index] = _feature_vector_new[index];
+    }
   }
 
   void FMModel::_print_model_param() {

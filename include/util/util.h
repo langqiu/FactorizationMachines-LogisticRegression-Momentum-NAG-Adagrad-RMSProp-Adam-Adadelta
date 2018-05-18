@@ -28,7 +28,7 @@ namespace util {
 
   std::vector<std::string> split(const std::string& source, const std::string& separator);
   time_type time_now();
-  void time_diff(const time_type& time_end, const time_type& time_start);
+  score_type time_diff(const time_type& time_end, const time_type& time_start);
   score_type unit_random();
 
 } // namespace util

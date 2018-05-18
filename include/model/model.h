@@ -31,6 +31,7 @@ namespace model {
       void _cal_model_logloss();
       void _print_step(const std::string& step);
       void _print_mini_batch(const size_t& batch);
+      void _print_time_cost(util::time_type time_end, util::time_type time_start);
       // train parameters
       size_t _iter_size; // iteration size
       size_t _batch_size; // batch size

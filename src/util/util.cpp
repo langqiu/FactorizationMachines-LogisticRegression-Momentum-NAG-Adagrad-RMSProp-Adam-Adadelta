@@ -19,12 +19,9 @@ namespace util {
     return std::chrono::system_clock::now();
   }
 
-  void time_diff(const time_type& time_end, const time_type& time_start) {
-#ifdef _DEBUG
+  score_type time_diff(const time_type& time_end, const time_type& time_start) {
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(time_end - time_start);
-    double delta = double(duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den;
-    std::cout << "  --> time-cost " << delta << std::endl; // time cost
-#endif
+    return static_cast<score_type>(duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den;
   }
 
   score_type unit_random() {

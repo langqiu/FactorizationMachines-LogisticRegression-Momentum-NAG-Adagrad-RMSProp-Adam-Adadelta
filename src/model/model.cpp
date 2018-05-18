@@ -44,6 +44,7 @@ namespace model {
         this->_backward(batch_start, batch_end);
         this->_update();
         batch_start = batch_end; // update start of the next batch
+        /*
         if (_curr_batch % TRAIN_PRINT_INTERVAL == 0) {
           _print_mini_batch(_curr_batch);
           _cal_model_logloss();
@@ -51,10 +52,11 @@ namespace model {
           _predict_dataset(_p_test_dataset); // predict test dataset
           _p_test_dataset->evaluate(); // evaluate test dataset
         }
+        */
       }
     }
     time_type time_end = time_now(); // time after train
-    time_diff(time_end, time_start); // print time cost
+    _print_time_cost(time_end, time_start);
     this->_print_model_param(); // print model
   }
 
@@ -111,6 +113,12 @@ namespace model {
 #ifdef _DEBUG
     std::cout << std::endl;
     std::cout << "  --> mini-batch " << batch << std::endl;
+#endif
+  }
+
+  void Model::_print_time_cost(time_type time_end, time_type time_start) {
+#ifdef _DEBUG
+    std::cout << "  --> time-cost " << time_diff(time_end, time_start) << std::endl; // time cost
 #endif
   }
 

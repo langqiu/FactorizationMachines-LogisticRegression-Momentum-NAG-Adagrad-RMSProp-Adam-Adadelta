@@ -29,7 +29,6 @@ namespace model {
       v.push_back(0.0); // bias
       _feature_vector.push_back(v);
     }
-    _feature_vector_new = _feature_vector;
     // init hyper parameters
     _alpha = alpha;
     // init train parameters
@@ -91,10 +90,10 @@ namespace model {
         for (size_t x=0; x<_fm_dims; x++) {
           score_type gradient = curr_sample._label - curr_sample._score;
           if (x < _fm_dims - 1) gradient *= feature_vector_sum[(x + _fm_dims / 2) % (_fm_dims - 1)];
-          _feature_vector_new[v][x] += _alpha * gradient * ::sqrt(_fm_delta)
+          _feature_vector[v][x] += _alpha * gradient * ::sqrt(_fm_delta)
             / ::sqrt(_fm_delta + _second_moment_vector[v][x]);
-          if (_feature_vector_new[v][x] < _min_bound) _feature_vector_new[v][x] = _min_bound;
-          if (_feature_vector_new[v][x] > _max_bound) _feature_vector_new[v][x] = _max_bound;
+          if (_feature_vector[v][x] < _min_bound) _feature_vector[v][x] = _min_bound;
+          if (_feature_vector[v][x] > _max_bound) _feature_vector[v][x] = _max_bound;
           _second_moment_vector[v][x] += gradient * gradient;
         }
       }
@@ -103,7 +102,8 @@ namespace model {
 
   void FMFengchaoModel::_update() {
     if (_curr_batch == 1) _print_step("update");
-    _feature_vector = _feature_vector_new;
+    // 嵌套vector直接赋值性能极其差，此行代码影响10倍性能
+    //_feature_vector = _feature_vector_new;
   }
 
   void FMFengchaoModel::_print_model_param() {

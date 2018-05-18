@@ -24,7 +24,6 @@ namespace model {
       void _print_model_param();
       // model parameters
       std::vector<std::vector<util::param_type>> _feature_vector;
-      std::vector<std::vector<util::param_type>> _feature_vector_new;
       // hyper parameters
       util::param_type _alpha;
       util::param_type _fm_delta;
