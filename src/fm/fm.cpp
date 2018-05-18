@@ -112,7 +112,7 @@ namespace model {
     }
     _theta_new[_f_size-1] += _theta[_f_size-1] * factor_theta; // delta from L2 for bias
     // vector L2
-    for (auto index : _theta_updated_vector) {
+    for (auto& index : _theta_updated_vector) {
       for (size_t x=0; x<_fm_dims; x++) {
         _feature_vector_new[index][x] += _feature_vector[index][x] * factor_vector;
       }
@@ -124,7 +124,7 @@ namespace model {
     _theta = _theta_new;
     // 嵌套vector直接赋值性能极其差，此行代码影响30倍性能
     //_feature_vector = _feature_vector_new;
-    for (auto index : _theta_updated_vector) {
+    for (auto& index : _theta_updated_vector) {
       _feature_vector[index] = _feature_vector_new[index];
     }
   }

@@ -104,8 +104,8 @@ namespace model {
     // calculate logloss
     _logloss = 0.0;
     for (size_t i=0; i<_data_size; i++) {
-      _logloss += -1 * (_data[i]._label * ::log(_data[i]._score)
-          + (1 - _data[i]._label) * ::log(1 - _data[i]._score));
+      _logloss -= _data[i]._label * ::log(_data[i]._score + LOGLOSS_DELTA)
+          + (1 - _data[i]._label) * ::log(1 - _data[i]._score + LOGLOSS_DELTA);
     }
     _logloss /= _data_size;
     return _logloss;

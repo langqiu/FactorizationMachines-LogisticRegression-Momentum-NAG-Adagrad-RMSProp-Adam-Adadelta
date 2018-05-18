@@ -6,6 +6,7 @@
 #define LABEL_MIDDLE 0.5
 #define LIBSVM_SEP1 " "
 #define LIBSVM_SEP2 ":"
+#define LOGLOSS_DELTA 10e-10
 #include "util.h"
 
 namespace model {
