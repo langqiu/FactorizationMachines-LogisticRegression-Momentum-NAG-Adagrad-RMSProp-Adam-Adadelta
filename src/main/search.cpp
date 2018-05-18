@@ -14,6 +14,7 @@ void help_1() {
     << "/" << LR_ADAM_MODEL
     << "/" << LR_ADAD_MODEL
     << "/" << FM_MODEL
+    << "/" << FM_FC_MODEL
     << "):" << std::endl;
   std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 }
@@ -35,7 +36,7 @@ int main(int argc, char* argv[]) {
   Model* lr_instance = NULL;
   std::string model_type;
   std::string command;
-  std::vector<std::string> v_model = std::vector<std::string>{LR_MODEL,LR_M_MODEL,LR_NAG_MODEL,LR_AG_MODEL,LR_RMS_MODEL,LR_ADAM_MODEL,LR_ADAD_MODEL,FM_MODEL};
+  std::vector<std::string> v_model = std::vector<std::string>{LR_MODEL,LR_M_MODEL,LR_NAG_MODEL,LR_AG_MODEL,LR_RMS_MODEL,LR_ADAM_MODEL,LR_ADAD_MODEL,FM_MODEL,FM_FC_MODEL};
   help_1();
   //while (std::cin >> model_type) { // remove '\n' by default
   for (auto& model_type : v_model) {
@@ -84,6 +85,9 @@ int main(int argc, char* argv[]) {
       v_beta_1[1] = 0.0001;
       v_beta_1[2] = 0.001;
       v_beta_1[3] = 0.0002;
+    } else if (model_type == FM_FC_MODEL) {
+      v_alpha[2] = 0.2;
+      v_lambda[2] = 0;
     }
     for (param_type alpha=v_alpha[1]; alpha<=v_alpha[2]; alpha+=v_alpha[3]) {
       for (param_type lambda=v_lambda[1]; lambda<=v_lambda[2]; lambda+=v_lambda[3]) {

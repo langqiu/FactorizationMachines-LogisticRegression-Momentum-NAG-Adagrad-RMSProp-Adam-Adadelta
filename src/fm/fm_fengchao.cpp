@@ -90,10 +90,14 @@ namespace model {
         }
       }
       for (auto& v : _theta_updated_vector) {
+        score_type factor = _alpha * ::sqrt(_fm_delta);
+        score_type delta = curr_sample._label - curr_sample._score;
         for (size_t x=0; x<_fm_dims; x++) {
-          score_type gradient = curr_sample._label - curr_sample._score;
+          //score_type gradient = curr_sample._label - curr_sample._score;
+          score_type gradient = delta;
           if (x < _fm_dims - 1) gradient *= feature_vector_sum[(x + _fm_dims / 2) % (_fm_dims - 1)];
-          _feature_vector[v][x] += _alpha * gradient * ::sqrt(_fm_delta)
+          //_feature_vector[v][x] += _alpha * gradient * ::sqrt(_fm_delta)
+          _feature_vector[v][x] += factor * gradient
             / ::sqrt(_fm_delta + _second_moment_vector[v][x]);
           if (_feature_vector[v][x] < _min_bound) _feature_vector[v][x] = _min_bound;
           if (_feature_vector[v][x] > _max_bound) _feature_vector[v][x] = _max_bound;
