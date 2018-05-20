@@ -14,7 +14,7 @@ namespace model {
   void LRModel::init(const size_t& iter_size, const size_t& batch_size,
       const param_type& alpha, const param_type& lambda,
       const param_type& beta_1, const param_type& beta_2,
-      const param_type& fm_dims) {
+      const param_type& reserve_1) {
     // init model parameters
     _theta.clear();
     _theta.reserve(_f_size);

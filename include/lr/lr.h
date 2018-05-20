@@ -12,7 +12,7 @@ namespace model {
       void init(const size_t& iter_size, const size_t& batch_size,
           const util::param_type& alpha, const util::param_type& lambda,
           const util::param_type& beta_1, const util::param_type& beta_2,
-          const util::param_type& fm_dims);
+          const util::param_type& reserve_1);
     protected:
       void _forward(const size_t& l, const size_t& r, DataSet* p_data);
       void _backward(const size_t& l, const size_t& r);
