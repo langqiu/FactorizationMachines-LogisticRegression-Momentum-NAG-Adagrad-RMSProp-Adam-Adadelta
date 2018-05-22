@@ -22,6 +22,7 @@ namespace model {
       void _backward(const size_t& l, const size_t& r);
       void _update();
       void _print_model_param();
+      void _init_vector(DataSet* p_data);
       // model parameters
       std::vector<std::vector<util::param_type>> _feature_vector;
       // hyper parameters

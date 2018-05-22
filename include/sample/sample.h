@@ -14,6 +14,8 @@ namespace model {
   struct Data {
     util::label_type _label; // label
     util::score_type _score; // model_predict
+    std::vector<util::param_type> _fm_sum_vector;
+    std::vector<std::vector<util::param_type>> _ffm_sum_vector;
     std::vector<util::sparse_f_type> _sparse_f_list; // sparse feature list
     Data(const util::label_type& label,
         const std::vector<util::sparse_f_type>& sparse_f_list) :

@@ -43,6 +43,9 @@ namespace model {
       _second_moment_vector.push_back(v);
     }
     _gradient = _second_moment_vector;
+    // bad implementation
+    _init_vector(_p_train_dataset);
+    _init_vector(_p_test_dataset);
   }
 
   void FMFengchaoModel::_forward(const size_t& l, const size_t& r, DataSet* p_data) {
@@ -51,20 +54,25 @@ namespace model {
      */
     if (_curr_batch == 1) _print_step("forward");
     auto& data = p_data->get_data(); // get dataset
+    for (size_t i=l; i<r; i++) {
+      auto& curr_sample = data[i]; // current sample
+      for (size_t x=0; x<_fm_dims; x++) {
+        curr_sample._fm_sum_vector[x] = 0.0;
+      }
+    }
     for (size_t i=l; i<r; i++) { // loop each sample in this batch
       auto& curr_sample = data[i]; // current sample
-      std::vector<param_type> feature_vector_sum(_fm_dims, 0.0);
       for (size_t k=0; k<curr_sample._sparse_f_list.size(); k++) {
         auto& curr_f = curr_sample._sparse_f_list[k];
         for (size_t x=0; x<_fm_dims; x++) {
-          feature_vector_sum[x] += _feature_vector[curr_f.first][x];
+          curr_sample._fm_sum_vector[x] += _feature_vector[curr_f.first][x];
         }
       }
       score_type product = 0.0;
       for (size_t x=0; x<_fm_dims/2; x++) {
-        product += feature_vector_sum[x] * feature_vector_sum[x + _fm_dims/2];
+        product += curr_sample._fm_sum_vector[x] * curr_sample._fm_sum_vector[x + _fm_dims/2];
       }
-      product += feature_vector_sum[_fm_dims - 1];
+      product += curr_sample._fm_sum_vector[_fm_dims - 1];
       curr_sample._score = 1 / (1 + ::exp(-1 * product)); // sigmoid
     }
   }
@@ -76,13 +84,9 @@ namespace model {
     std::vector<param_type> curr_theta_updated;
     for (size_t i=l; i<r; i++) {
       auto& curr_sample = data[i]; // current sample
-      std::vector<param_type> feature_vector_sum(_fm_dims, 0.0);
       _theta_updated_vector.clear();
       for (size_t k=0; k<curr_sample._sparse_f_list.size(); k++) { // loop features
         auto& curr_f = curr_sample._sparse_f_list[k]; // current feature
-        for (size_t x=0; x<_fm_dims; x++) {
-          feature_vector_sum[x] += _feature_vector[curr_f.first][x];
-        }
         _theta_updated_vector.push_back(curr_f.first);
         if (r - l > 1 && theta_updated.find(curr_f.first) == theta_updated.end()) {
           theta_updated.insert(curr_f.first);
@@ -95,9 +99,9 @@ namespace model {
         for (size_t x=0; x<_fm_dims; x++) {
           //score_type gradient = curr_sample._label - curr_sample._score;
           score_type gradient = delta;
-          if (x < _fm_dims - 1) gradient *= feature_vector_sum[(x + _fm_dims / 2) % (_fm_dims - 1)];
+          if (x < _fm_dims - 1) gradient *= curr_sample._fm_sum_vector[(x + _fm_dims / 2) % (_fm_dims - 1)];
           //_feature_vector[v][x] += _alpha * gradient * ::sqrt(_fm_delta)
-          _feature_vector[v][x] += factor * gradient
+          _feature_vector[v][x] += factor * gradient / (r - l)
             / ::sqrt(_fm_delta + _second_moment_vector[v][x]);
           if (_feature_vector[v][x] < _min_bound) _feature_vector[v][x] = _min_bound;
           if (_feature_vector[v][x] > _max_bound) _feature_vector[v][x] = _max_bound;
@@ -147,6 +151,17 @@ namespace model {
       std::cout << _f_index2hash[parameters[i].second] << " " << parameters[i].first << std::endl;
     }
 #endif
+  }
+
+  void FMFengchaoModel::_init_vector(DataSet* p_data) {
+    auto& data = p_data->get_data();
+    size_t data_size = p_data->get_size();
+    for (size_t i=0; i<data_size; i++) {
+      data[i]._fm_sum_vector.clear();
+      for (size_t x=0; x<_fm_dims; x++) {
+        data[i]._fm_sum_vector.push_back(0.0);
+      }
+    }
   }
 
 } // namespace model
