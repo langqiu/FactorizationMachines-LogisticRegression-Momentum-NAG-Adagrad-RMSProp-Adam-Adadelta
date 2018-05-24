@@ -16,7 +16,7 @@ Compile the project by running "make", there are two ways to use it:
         ./bin/train data/airbnb_train_dataset data/airbnb_test_dataset
 
     2)  choose a model and input hyper parameters.
-        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++M
+        M+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         please input [M] to create a new model:
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         M
