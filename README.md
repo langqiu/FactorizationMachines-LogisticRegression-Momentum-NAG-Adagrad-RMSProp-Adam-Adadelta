@@ -13,17 +13,13 @@ Compile the project by running "make", there are two ways to use it:
 1.  choose a variant of the LR model and tune it.
 
     1)  start running.
-
         ./bin/train data/airbnb_train_dataset data/airbnb_test_dataset
 
     2)  choose a model and input hyper parameters.
 
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
         please input [M] to create a new model:
-
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
         M
 
         +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
