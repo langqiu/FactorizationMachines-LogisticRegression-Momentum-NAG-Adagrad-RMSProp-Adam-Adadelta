@@ -12,7 +12,7 @@ namespace model {
           const util::hash2index_type& f_hash2index, const util::index2hash_type& f_index2hash,
           const util::f_index_type f_size, const std::string& model_type);
       void init(const size_t& iter_size, const size_t& batch_size,
-          const util::param_type& _alpha_vector, const util::param_type& lambda_vector,
+          const util::param_type& alpha_vector, const util::param_type& lambda_vector,
           const util::param_type& alpha_bias, const util::param_type& lambda_bias,
           const util::param_type& fm_dims);
     private:
@@ -23,10 +23,11 @@ namespace model {
       void _init_vector(DataSet* p_data);
       // model parameters
       std::vector<std::vector<util::param_type>> _feature_vector;
+      std::vector<std::vector<util::param_type>> _feature_vector_new;
       // hyper parameters
       util::param_type _alpha_vector;
-      util::param_type _alpha_bias;
       util::param_type _lambda_vector;
+      util::param_type _alpha_bias;
       util::param_type _lambda_bias;
       size_t _fm_dims;
       // extra vectors

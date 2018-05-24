@@ -55,6 +55,9 @@ namespace model {
       } else if (model_type == FM_FC_MODEL) { // fm fengchao
         _p_model = new FMFengchaoModel(_p_train_dataset, _p_test_dataset,
             _f_hash2index, _f_index2hash, _f_size, model_type);
+      } else if (model_type == FFM_FC_MODEL) { // ffm fengchao
+        _p_model = new FFMFengchaoModel(_p_train_dataset, _p_test_dataset,
+            _f_hash2index, _f_index2hash, _f_size, model_type);
       }
       _model_type = model_type; // model type rewrite
     }

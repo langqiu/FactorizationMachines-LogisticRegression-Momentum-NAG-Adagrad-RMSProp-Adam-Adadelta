@@ -78,6 +78,9 @@ namespace model {
   }
 
   void FMFengchaoModel::_backward(const size_t& l, const size_t& r) {
+    /*
+     * TODO fix the curr_theta_updated
+     */
     if (_curr_batch == 1) _print_step("backward");
     auto& data = _p_train_dataset->get_data(); // get train dataset
     std::unordered_set<f_index_type> theta_updated; // record theta in BGD

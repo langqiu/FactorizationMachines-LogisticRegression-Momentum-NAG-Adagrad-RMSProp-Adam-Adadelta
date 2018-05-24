@@ -21,6 +21,7 @@ void help_2() {
     << "/" << LR_ADAD_MODEL
     << "/" << FM_MODEL
     << "/" << FM_FC_MODEL
+    << "/" << FFM_FC_MODEL
     << "):" << std::endl;
   std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 }

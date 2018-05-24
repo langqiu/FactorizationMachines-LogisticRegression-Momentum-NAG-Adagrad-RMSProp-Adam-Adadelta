@@ -9,6 +9,7 @@
 #define LR_ADAD_MODEL "lr_adad"
 #define FM_MODEL "fm"
 #define FM_FC_MODEL "fm_fc"
+#define FFM_FC_MODEL "ffm_fc"
 #include "lr.h"
 #include "lr_momentum.h"
 #include "lr_nag.h"
@@ -18,6 +19,7 @@
 #include "lr_adadelta.h"
 #include "fm.h"
 #include "fm_fengchao.h"
+#include "ffm_fengchao.h"
 
 namespace model {
 
